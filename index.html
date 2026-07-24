@@ -535,7 +535,11 @@
       tbody.innerHTML = `<tr><td colspan="11" class="empty">No expenses logged yet. Add one using the form.</td></tr>`;
       return;
     }
-    const sorted = [...list].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    const sorted = [...list].sort((a, b) => {
+      const catCompare = (a.category || '').localeCompare(b.category || '');
+      if (catCompare !== 0) return catCompare;
+      return (b.date || '').localeCompare(a.date || '');
+    });
     tbody.innerHTML = sorted.map(e => e.id === editingId ? editRowHtml(e) : displayRowHtml(e)).join('');
 
     tbody.querySelectorAll('.del-btn').forEach(btn => {
